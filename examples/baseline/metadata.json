@@ -1,0 +1,8 @@
+{
+    "image": "sberbank/python",
+    "entry_points": {
+        "train_classification": "python train.py --mode classification --train-csv {train_csv} --model-dir {model_dir}",
+        "train_regression": "python train.py --mode regression --train-csv {train_csv} --model-dir {model_dir}",
+        "predict": "python predict.py --test-csv {test_csv} --prediction-csv {prediction_csv} --model-dir {model_dir}"
+    }
+}
