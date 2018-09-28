@@ -27,19 +27,20 @@ if __name__ == '__main__':
     df = pd.read_csv(args.test_csv)
     print('Dataset read, shape {}'.format(df.shape))
 
-    # features from datetime
-    df = transform_datetime_features(df)
+    if not model_config['is_big']:
+        # features from datetime
+        df = transform_datetime_features(df)
+
+        # categorical encoding
+        for col_name, unique_values in model_config['categorical_values'].items():
+            for unique_value in unique_values:
+                df['onehot_{}={}'.format(col_name, unique_value)] = (df[col_name] == unique_value).astype(int)
 
     # missing values
     if model_config['missing']:
         df.fillna(-1, inplace=True)
     elif any(df.isnull()):
         df.fillna(value=df.mean(axis=0), inplace=True)
-
-    # categorical encoding
-    for col_name, unique_values in model_config['categorical_values'].items():
-        for unique_value in unique_values:
-            df['onehot_{}={}'.format(col_name, unique_value)] = (df[col_name] == unique_value).astype(int)
 
     # filter columns
     used_columns = model_config['used_columns']
